@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.example.glowbridge.navigation.NavGraph
 import com.example.glowbridge.ui.theme.GlowBridgeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,47 +36,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GlowBridgeTheme {
+                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = {
-                        TopAppBar(title = {Text(text = "Glow Bridge")})
+                        TopAppBar(title = { Text(text = "Glow Bridge") })
                     }
-
-
                 ) { innerPadding ->
-
-                    LoginScreen()
+                    NavGraph(navController = navController)
                 }
             }
         }
     }
+
+
 }
-
-@Composable
-fun LoginScreen() {
-    var username by remember { mutableStateOf("") } // State variable
-    var password by remember { mutableStateOf("") }
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp), // Adds padding to avoid overlap
-        horizontalAlignment = Alignment.CenterHorizontally, // Centers horizontally
-        verticalArrangement = Arrangement.Center // Centers vertically
-    ){
-        TextField(
-            value =  username, // Binds the state to the TextField
-            placeholder = { Text(text = "Enter your username")},
-            onValueChange = { newText -> username = newText   }
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = password,
-            placeholder = { Text(text = "Enter password")},
-            onValueChange = {newText -> password = newText},
-            visualTransformation = PasswordVisualTransformation())
-    }
-}
-
-
 
 @Preview(showBackground = true)
 @Composable
