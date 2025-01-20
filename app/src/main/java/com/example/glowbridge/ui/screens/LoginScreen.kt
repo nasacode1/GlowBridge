@@ -1,6 +1,5 @@
 package com.example.glowbridge.ui.screens
 
-import android.service.autofill.OnClickAction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +20,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onLoginSuccess: (String) -> Unit) {
     var username by remember { mutableStateOf("") } // State variable
     var password by remember { mutableStateOf("") }
     Column (
@@ -46,7 +45,7 @@ fun LoginScreen() {
         Spacer(modifier = Modifier.height(10.dp))
         SubmitButton(
             onClick = {
-
+                onLoginSuccess(username)
             }
         )
 
