@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Preserve Jetpack Compose classes
+-keep class androidx.compose.** { *; }
+-keep class kotlin.** { *; }
+-keepclassmembers class kotlin.** { *; }
+-dontwarn androidx.compose.**
+-dontwarn kotlinx.coroutines.**
