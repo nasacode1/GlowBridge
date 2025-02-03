@@ -46,7 +46,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = {
-                        TopAppBar(title = { Text(text = "Glow Bridge") })
                     }
                 ) { innerPadding ->
                     NavGraph(navController = navController)
