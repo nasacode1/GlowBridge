@@ -28,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.glowbridge.navigation.BottomNavigationBar
 import com.example.glowbridge.navigation.NavGraph
 import com.example.glowbridge.network.RetrofitInstance
 import com.example.glowbridge.ui.theme.GlowBridgeTheme
@@ -44,8 +46,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             GlowBridgeTheme {
                 val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = {
+                    },
+                    bottomBar = {
+                        if(currentRoute != "Welcome"){
+                            BottomNavigationBar(navController)
+                        }
+
                     }
                 ) { innerPadding ->
                     NavGraph(navController = navController)

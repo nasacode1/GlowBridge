@@ -14,7 +14,11 @@ fun NavGraph(navController: NavHostController){
         startDestination = "Welcome"){
 
         composable("Welcome"){
-            Welcome()
+            Welcome(
+                onStartedSuccess = {
+                    navController.navigate("LoginScreen")
+                }
+            )
         }
 
         composable("LoginScreen"){
@@ -29,7 +33,9 @@ fun NavGraph(navController: NavHostController){
             HomePage(
             )
         }
-
+        composable(BottomNavItem.Home.route) { HomePage() }
     }
 }
+
+
 

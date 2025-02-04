@@ -1,0 +1,27 @@
+package com.example.glowbridge.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import com.example.glowbridge.navigation.BottomNavItem
+@Composable
+fun BottomNavigationBar(navController: NavController) {
+    val items = listOf(BottomNavItem.Home, BottomNavItem.Search, BottomNavItem.Profile, BottomNavItem.Streak)
+
+        NavigationBar {
+        items.forEach { item ->
+            NavigationBarItem(
+
+                icon = { Icon(Icons.Outlined)  },
+                label = { Text(item.label) },
+                selected = false, // Handle selection state dynamically
+                onClick = { navController.navigate(item.route)},
+            )
+        }
+    }
+}
