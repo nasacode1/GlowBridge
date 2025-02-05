@@ -51,7 +51,6 @@ fun LoginScreen(onLoginSuccess: (String) -> Unit) {
                 onLoginSuccess(username)
             }
         )
-
     }
 }
 

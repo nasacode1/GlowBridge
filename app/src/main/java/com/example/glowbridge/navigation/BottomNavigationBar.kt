@@ -11,7 +11,11 @@ import androidx.compose.material3.Text
 import com.example.glowbridge.navigation.BottomNavItem
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val items = listOf(BottomNavItem.Home, BottomNavItem.Search, BottomNavItem.Profile, BottomNavItem.Streak)
+    val items = listOf(
+        BottomNavItem.Home,
+        BottomNavItem.Search,
+        BottomNavItem.Profile,
+        BottomNavItem.Streak)
 
         NavigationBar {
             val currentRoute = navController.currentDestination?.route
