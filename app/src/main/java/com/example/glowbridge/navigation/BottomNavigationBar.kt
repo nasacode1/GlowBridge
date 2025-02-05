@@ -14,12 +14,13 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(BottomNavItem.Home, BottomNavItem.Search, BottomNavItem.Profile, BottomNavItem.Streak)
 
         NavigationBar {
+            val currentRoute = navController.currentDestination?.route
         items.forEach { item ->
             NavigationBarItem(
 
-                icon = { Icon(Icons.Outlined)  },
+                icon = { Icon(item.icon, contentDescription = item.label)  },
                 label = { Text(item.label) },
-                selected = false, // Handle selection state dynamically
+                selected = currentRoute == item.route, // Handle selection state dynamically
                 onClick = { navController.navigate(item.route)},
             )
         }
