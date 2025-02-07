@@ -1,4 +1,4 @@
-package com.example.glowbridge.navigation
+package com.example.glowbridge.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.glowbridge.ui.screens.HomePage
 import com.example.glowbridge.ui.screens.LoginScreen
 import com.example.glowbridge.ui.screens.Welcome
-
+import com.example.glowbridge.ui.screens.ProductSearchScreen
 @Composable
 fun NavGraph(navController: NavHostController){
     NavHost(navController = navController,
@@ -24,7 +24,7 @@ fun NavGraph(navController: NavHostController){
         composable("LoginScreen"){
             LoginScreen(
                 onLoginSuccess = { username ->
-                    navController.navigate("HomePage")
+                    navController.navigate("search")
                 }
             )
         }
@@ -33,7 +33,11 @@ fun NavGraph(navController: NavHostController){
             HomePage(
             )
         }
+
+        composable("search") { ProductSearchScreen() }
         composable(BottomNavItem.Home.route) { HomePage() }
+
+
     }
 }
 

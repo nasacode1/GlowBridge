@@ -1,12 +1,10 @@
 package com.example.glowbridge.network
 
+import com.example.glowbridge.data.model.ProductResponse
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Path
 
-// Define the API endpoints
 interface OpenFoodFactsApi {
-    @GET("api/v0/product")
-    suspend fun getProductDetails(
-        @Query("code") barcode: String
-    ): ProductResponse
+    @GET("api/v0/product/{barcode}.json")
+    suspend fun getProduct(@Path("barcode") barcode: String): ProductResponse
 }

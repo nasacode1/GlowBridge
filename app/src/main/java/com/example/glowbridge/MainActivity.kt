@@ -30,16 +30,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.glowbridge.navigation.BottomNavigationBar
-import com.example.glowbridge.navigation.NavGraph
+import com.example.glowbridge.ui.navigation.BottomNavigationBar
+import com.example.glowbridge.ui.navigation.NavGraph
 import com.example.glowbridge.network.RetrofitInstance
 import com.example.glowbridge.ui.theme.GlowBridgeTheme
+import com.example.glowbridge.viewmodel.ProductSearchViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.activity.viewModels
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
+    private val viewModel: ProductSearchViewModel by viewModels() // ✅ Move ViewModel here
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,14 +54,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                    },
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {},
                     bottomBar = {
-                        if(currentRoute != "Welcome"){
+                        if (currentRoute != "Welcome") {
                             BottomNavigationBar(navController)
                         }
-
                     }
                 ) { innerPadding ->
                     NavGraph(navController = navController)
@@ -64,9 +69,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
-fun ProductSearchScreen() {
+fun ProductSearchScreen(viewModel: ProductSearchViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     var barcode by remember { mutableStateOf("") }
     var productName by remember { mutableStateOf<String?>(null) }
     var nutriScore by remember { mutableStateOf<String?>(null) }
@@ -86,26 +90,9 @@ fun ProductSearchScreen() {
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val response = RetrofitInstance.api.getProductDetails(barcode)
-                    if (response.status == 1) {
-                        productName = response.product?.productName
-                        nutriScore = response.product?.nutriscoreGrade
-                        errorMessage = null
-                    } else {
-                        productName = null
-                        nutriScore = null
-                        errorMessage = "Product not found: ${response.statusVerbose}"
-                    }
-                } catch (e: Exception) {
-                    productName = null
-                    nutriScore = null
-                    errorMessage = "Error: ${e.message}"
-                }
-            }
-        }) {
+
+        // ✅ Correct way to use ViewModel
+        Button(onClick = { viewModel.searchProduct(barcode) }) {
             Text("Search")
         }
 

@@ -1,4 +1,4 @@
-package com.example.glowbridge.navigation
+package com.example.glowbridge.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

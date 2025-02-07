@@ -35,19 +35,22 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun HomePage(){
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-
-
-    ){
-        ScanFoodButton()
-        LogFoodButton()
+    Column(
+        modifier = Modifier.fillMaxSize().padding(80.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(80.dp),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ){
+            Spacer(modifier = Modifier.weight(1f))
+            ScanFoodButton()
+            LogFoodButton()
 //        Text(text = "Hey, welcome to Glow Bridge.")
 //       SubmitButton()
+        }
     }
 }
 
