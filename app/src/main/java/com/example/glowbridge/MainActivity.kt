@@ -39,7 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.activity.viewModels
-
+import androidx.compose.material3.CenterAlignedTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +56,12 @@ class MainActivity : ComponentActivity() {
                 val currentRoute = navBackStackEntry?.destination?.route
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = {},
-                    bottomBar = {
-                        if (currentRoute != "Welcome") {
+                    topBar = {
+                        CenterAlignedTopAppBar(title = { Text(text = "GlowBridge") })
+                    }
+                    ,
+                     bottomBar = {
+                        if(currentRoute != "Welcome") {
                             BottomNavigationBar(navController)
                         }
                     }

@@ -1,10 +1,14 @@
 package com.example.glowbridge.ui.screens
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
@@ -22,48 +27,190 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat.startActivity
+import coil.compose.rememberAsyncImagePainter
+import org.jsoup.Jsoup
 
 @Composable
-fun HomePage(){
+fun HomePage(onScanSuccess: () -> Unit){
     Column(
-        modifier = Modifier.fillMaxSize().padding(80.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(80.dp)
     ) {
+        SimpleLazyRow()
+
         Row(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(80.dp),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceEvenly
         ){
-            Spacer(modifier = Modifier.weight(1f))
-            ScanFoodButton()
+            ScanFoodButton(
+                onClick = {
+                    onScanSuccess()
+                }
+            )
             LogFoodButton()
-//        Text(text = "Hey, welcome to Glow Bridge.")
 //       SubmitButton()
         }
     }
 }
 
+fun openWebPage(context: Context, url: String) {
+    val webpage: Uri = Uri.parse(url)
+    val intent = Intent(Intent.ACTION_VIEW, webpage)
+    val chooser = Intent.createChooser(intent, "Open with")
+
+    if (intent.resolveActivity(context.packageManager) != null) {
+        Log.d("Webpage", "Opening now...")
+        context.startActivity(chooser)
+    }
+    else{
+        Log.d("Webpage", "Action not found")
+    }
+}
+
+fun fetchOgImage(url: String, callback: (String?) -> Unit) {
+    Thread {
+        try {
+            val doc = Jsoup.connect(url).get()
+            val ogImage = doc.select("meta[property=og:image]").attr("content")
+            callback(ogImage)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            callback(null)
+        }
+    }.start()
+}
+
 @Composable
-fun ScanFoodButton(){
-    IconButton(onClick = { /*TODO*/ }) {
+fun SimpleLazyRow() {
+    val context= LocalContext.current
+
+
+    LazyRow {
+        var articleUrl1 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-role-of-anti-inflammatory-foods-in-pcos-management/articleshow/118052630.cms"
+        item {
+            var imageUrl by remember { mutableStateOf<String?>(null) }
+            LaunchedEffect(articleUrl1) {
+                fetchOgImage(articleUrl1) { fetchedUrl ->
+                    imageUrl = fetchedUrl
+                }
+            }
+            Card(
+            onClick = {
+                    openWebPage(context, articleUrl1)
+                },
+                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    if(imageUrl != null){
+                        Image(painter = rememberAsyncImagePainter(model = imageUrl),
+                            contentDescription ="Article image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    else{
+                        Text("Clickable", Modifier.align(Alignment.Center))
+                    }
+                     }
+
+            }
+
+        }
+        var articleUrl2 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-truth-about-juice-cleanses-how-they-worsen-gut-health-and-metabolism-reveals-study/articleshow/118034912.cms"
+        item {
+            var imageUrl by remember { mutableStateOf<String?>(null) }
+            LaunchedEffect(articleUrl2) {
+                fetchOgImage(articleUrl2) { fetchedUrl ->
+                    imageUrl = fetchedUrl
+                }
+            }
+            Card(
+                onClick = {
+                    openWebPage(context, articleUrl2)
+                },
+                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    if(imageUrl != null){
+                        Image(painter = rememberAsyncImagePainter(model = imageUrl),
+                            contentDescription ="Article image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    else{
+                        Text("Clickable", Modifier.align(Alignment.Center))
+                    }
+                }
+
+            }
+
+        }
+        var articleUrl3 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/105-year-old-woman-shares-2-simple-secrets-to-living-a-long-life/articleshow/118007525.cms"
+        item {
+            var imageUrl by remember { mutableStateOf<String?>(null) }
+            LaunchedEffect(articleUrl3) {
+                fetchOgImage(articleUrl3) { fetchedUrl ->
+                    imageUrl = fetchedUrl
+                }
+            }
+            Card(
+                onClick = {
+                    openWebPage(context, articleUrl3)
+                },
+                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    if(imageUrl != null){
+                        Image(painter = rememberAsyncImagePainter(model = imageUrl),
+                            contentDescription ="Article image",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    else{
+                        Text("Clickable", Modifier.align(Alignment.Center))
+                    }
+                }
+
+            }
+
+        }
+
+
+
+
+
+
+    }
+}
+
+@Composable
+fun ScanFoodButton(onClick: () -> Unit){
+    IconButton(onClick = {  onClick()}) {
         Icon(imageVector = Icons.Filled.SoupKitchen, contentDescription = "Scan food", modifier = Modifier.size(50.dp))
     }
 }
 
 @Composable
 fun LogFoodButton(){
-    IconButton(onClick = { /*TODO*/ }) {
+    IconButton(onClick = {  }) {
         Icon(imageVector = Icons.Filled.Edit, contentDescription = "Log Food", modifier = Modifier.size(50.dp))
     }
 }
@@ -120,5 +267,3 @@ fun SubmitButton() {
         Text(text = "Click to book an appointment with nutritionists")
     }
 }
-
-

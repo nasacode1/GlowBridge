@@ -24,18 +24,24 @@ fun NavGraph(navController: NavHostController){
         composable("LoginScreen"){
             LoginScreen(
                 onLoginSuccess = { username ->
-                    navController.navigate("search")
+                    navController.navigate("HomePage")
                 }
             )
         }
 
         composable("HomePage"){
             HomePage(
+                onScanSuccess = {
+                    navController.navigate("search")
+                }
             )
         }
 
-        composable("search") { ProductSearchScreen() }
-        composable(BottomNavItem.Home.route) { HomePage() }
+        composable("search") { ProductSearchScreen(
+        ) }
+        composable(BottomNavItem.Home.route) { HomePage(onScanSuccess = {
+            navController.navigate(("search"))
+        }) }
 
 
     }
