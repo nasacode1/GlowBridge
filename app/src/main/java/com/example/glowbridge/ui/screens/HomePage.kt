@@ -3,6 +3,7 @@ package com.example.glowbridge.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.unit.sp
 import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -23,11 +24,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SoupKitchen
+import androidx.compose.material.icons.outlined.CameraAlt
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -39,7 +43,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
@@ -51,10 +59,15 @@ fun HomePage(onScanSuccess: () -> Unit){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(80.dp)
+            .padding(10.dp, 110.dp)
     ) {
+        Text(text = "Health articles", fontSize = 20.sp)
+        Spacer(modifier = Modifier.size(20.dp))
         SimpleLazyRow()
-
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(text = "Nutrient Lookup", fontSize = 20.sp)
+        Spacer(modifier = Modifier.size(10.dp))
+        nutrientLookup()
         Row(
             modifier = Modifier
                 .padding(80.dp),
@@ -68,6 +81,48 @@ fun HomePage(onScanSuccess: () -> Unit){
             )
             LogFoodButton()
 //       SubmitButton()
+        }
+    }
+}
+
+@Composable
+fun nutrientLookup(){
+    Row(modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceEvenly){
+        OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
+            Box(
+                modifier = Modifier.size(100.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Column {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Icon(imageVector = Icons.Outlined.CameraAlt, contentDescription = "Camera icon",
+                        Modifier
+                            .size(20.dp)
+                            .align(Alignment.CenterHorizontally))
+                    Text(text = "Scan food",
+                        modifier = Modifier.padding(5.dp),
+                        textAlign = TextAlign.Center)
+                }
+            }
+        }
+
+        OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
+            Box(
+                modifier = Modifier.size(100.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Column {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Icon(imageVector = Icons.Outlined.QrCodeScanner, contentDescription = "QR code scanner icon",
+                        Modifier
+                            .size(20.dp)
+                            .align(Alignment.CenterHorizontally))
+                    Text(text = "Search by barcodde",
+                        modifier = Modifier.padding(5.dp),
+                        textAlign = TextAlign.Center)
+                }
+            }
         }
     }
 }
@@ -100,11 +155,12 @@ fun fetchOgImage(url: String, callback: (String?) -> Unit) {
 }
 
 @Composable
-fun SimpleLazyRow() {
+fun SimpleLazyRow(
+) {
     val context= LocalContext.current
-
-
-    LazyRow {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         var articleUrl1 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-role-of-anti-inflammatory-foods-in-pcos-management/articleshow/118052630.cms"
         item {
             var imageUrl by remember { mutableStateOf<String?>(null) }
@@ -129,10 +185,8 @@ fun SimpleLazyRow() {
                     else{
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
-                     }
-
+                }
             }
-
         }
         var articleUrl2 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-truth-about-juice-cleanses-how-they-worsen-gut-health-and-metabolism-reveals-study/articleshow/118034912.cms"
         item {
@@ -159,9 +213,7 @@ fun SimpleLazyRow() {
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
                 }
-
             }
-
         }
         var articleUrl3 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/105-year-old-woman-shares-2-simple-secrets-to-living-a-long-life/articleshow/118007525.cms"
         item {
@@ -188,16 +240,8 @@ fun SimpleLazyRow() {
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
                 }
-
             }
-
         }
-
-
-
-
-
-
     }
 }
 
