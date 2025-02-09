@@ -24,7 +24,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SoupKitchen
+import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.CameraAlt
+import androidx.compose.material.icons.outlined.Dining
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -67,7 +69,11 @@ fun HomePage(onScanSuccess: () -> Unit){
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Nutrient Lookup", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(10.dp))
-        nutrientLookup()
+        nutrientLookupSection()
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(text = "Tracking & Insights", fontSize = 20.sp)
+        Spacer(modifier = Modifier.size(10.dp))
+        trackingInsightsSection()
         Row(
             modifier = Modifier
                 .padding(80.dp),
@@ -86,7 +92,7 @@ fun HomePage(onScanSuccess: () -> Unit){
 }
 
 @Composable
-fun nutrientLookup(){
+fun nutrientLookupSection(){
     Row(modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceEvenly){
         OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
@@ -127,6 +133,48 @@ fun nutrientLookup(){
     }
 }
 
+
+@Composable
+fun trackingInsightsSection(){
+    Row(modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceEvenly){
+        OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
+            Box(
+                modifier = Modifier.size(100.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Column {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Icon(imageVector = Icons.Outlined.Dining, contentDescription = "Log food icon",
+                        Modifier
+                            .size(20.dp)
+                            .align(Alignment.CenterHorizontally))
+                    Text(text = "Log food",
+                        modifier = Modifier.padding(5.dp),
+                        textAlign = TextAlign.Center)
+                }
+            }
+        }
+
+        OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
+            Box(
+                modifier = Modifier.size(100.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Column {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Icon(imageVector = Icons.Outlined.BarChart, contentDescription = "Daily insights icon",
+                        Modifier
+                            .size(20.dp)
+                            .align(Alignment.CenterHorizontally))
+                    Text(text = "Daily Insights",
+                        modifier = Modifier.padding(5.dp),
+                        textAlign = TextAlign.Center)
+                }
+            }
+        }
+    }
+}
 fun openWebPage(context: Context, url: String) {
     val webpage: Uri = Uri.parse(url)
     val intent = Intent(Intent.ACTION_VIEW, webpage)
