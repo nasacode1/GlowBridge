@@ -8,12 +8,14 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -46,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -54,14 +57,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 
 @Composable
 fun HomePage(onScanSuccess: () -> Unit){
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp, 110.dp)
+            .padding(10.dp, 110.dp),
     ) {
         Text(text = "Health articles", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(20.dp))
@@ -93,7 +99,7 @@ fun HomePage(onScanSuccess: () -> Unit){
 
 @Composable
 fun nutrientLookupSection(){
-    Row(modifier = Modifier.fillMaxSize(),
+    Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly){
         OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
             Box(
@@ -136,7 +142,7 @@ fun nutrientLookupSection(){
 
 @Composable
 fun trackingInsightsSection(){
-    Row(modifier = Modifier.fillMaxSize(),
+    Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly){
         OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
             Box(
@@ -202,6 +208,24 @@ fun fetchOgImage(url: String, callback: (String?) -> Unit) {
     }.start()
 }
 
+fun fetchOgTitle(url: String, callback: (String?) -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val doc = Jsoup.connect(url).timeout(5000).get() // Set timeout
+            val ogTitle = doc.select("meta[property=og:title]").attr("content").ifEmpty { null }
+            withContext(Dispatchers.Main) {
+                callback(ogTitle) // Ensure callback runs on main thread
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                callback(null) // Return null if an error occurs
+            }
+        }
+    }
+}
+
+
 @Composable
 fun SimpleLazyRow(
 ) {
@@ -212,23 +236,30 @@ fun SimpleLazyRow(
         var articleUrl1 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-role-of-anti-inflammatory-foods-in-pcos-management/articleshow/118052630.cms"
         item {
             var imageUrl by remember { mutableStateOf<String?>(null) }
+            var title by remember { mutableStateOf<String?>(null) }
             LaunchedEffect(articleUrl1) {
                 fetchOgImage(articleUrl1) { fetchedUrl ->
                     imageUrl = fetchedUrl
+                }
+                fetchOgTitle(articleUrl1){fetchedTitle ->
+                    title = fetchedTitle
                 }
             }
             Card(
             onClick = {
                     openWebPage(context, articleUrl1)
                 },
-                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+                modifier = Modifier.size(width = 300.dp, height = 240.dp)
             ) {
                 Box(Modifier.fillMaxSize()) {
                     if(imageUrl != null){
                         Image(painter = rememberAsyncImagePainter(model = imageUrl),
                             contentDescription ="Article image",
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillHeight
                         )
+                        Text(text = title ?:"Loading..", modifier = Modifier.border(3, shape = RectangleShape))
+                        
                     }
                     else{
                         Text("Clickable", Modifier.align(Alignment.Center))
@@ -248,13 +279,14 @@ fun SimpleLazyRow(
                 onClick = {
                     openWebPage(context, articleUrl2)
                 },
-                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+                modifier = Modifier.size(width = 300.dp, height = 240.dp)
             ) {
                 Box(Modifier.fillMaxSize()) {
                     if(imageUrl != null){
                         Image(painter = rememberAsyncImagePainter(model = imageUrl),
                             contentDescription ="Article image",
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillHeight
                         )
                     }
                     else{
@@ -275,13 +307,14 @@ fun SimpleLazyRow(
                 onClick = {
                     openWebPage(context, articleUrl3)
                 },
-                modifier = Modifier.size(width = 300.dp, height = 300.dp)
+                modifier = Modifier.size(width = 300.dp, height = 240.dp)
             ) {
                 Box(Modifier.fillMaxSize()) {
                     if(imageUrl != null){
                         Image(painter = rememberAsyncImagePainter(model = imageUrl),
                             contentDescription ="Article image",
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillHeight
                         )
                     }
                     else{
