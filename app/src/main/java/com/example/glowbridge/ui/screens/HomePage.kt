@@ -8,6 +8,7 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,10 +19,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
@@ -32,6 +35,7 @@ import androidx.compose.material.icons.outlined.Dining
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +50,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -245,37 +251,52 @@ fun SimpleLazyRow(
                     title = fetchedTitle
                 }
             }
-            Card(
+            ElevatedCard(
             onClick = {
                     openWebPage(context, articleUrl1)
                 },
                 modifier = Modifier.size(width = 300.dp, height = 240.dp)
             ) {
-                Box(Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize()
+                    ) {
                     if(imageUrl != null){
                         Image(painter = rememberAsyncImagePainter(model = imageUrl),
                             contentDescription ="Article image",
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.FillHeight
                         )
-                        Text(text = title ?:"Loading..", modifier = Modifier.border(3, shape = RectangleShape))
-                        
                     }
                     else{
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black, Color.Black.copy(alpha = 0.6f)),
+                                startY = 200f
+                            )
+                        ),
+                    )
+                    Text(text = title ?:"Loading..", modifier = Modifier.offset(5.dp, 150.dp), color = Color.White)
                 }
+
+
             }
         }
         var articleUrl2 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/the-truth-about-juice-cleanses-how-they-worsen-gut-health-and-metabolism-reveals-study/articleshow/118034912.cms"
         item {
             var imageUrl by remember { mutableStateOf<String?>(null) }
+            var title by remember { mutableStateOf<String?>(null) }
             LaunchedEffect(articleUrl2) {
                 fetchOgImage(articleUrl2) { fetchedUrl ->
                     imageUrl = fetchedUrl
                 }
+                fetchOgTitle(articleUrl1){fetchedTitle ->
+                    title = fetchedTitle
+                }
             }
-            Card(
+            ElevatedCard(
                 onClick = {
                     openWebPage(context, articleUrl2)
                 },
@@ -292,18 +313,32 @@ fun SimpleLazyRow(
                     else{
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black, Color.Black.copy(alpha = 0.6f)),
+                                startY = 200f
+                            )
+                        ),
+                    )
+                    Text(text = title ?:"Loading..", modifier = Modifier.offset(5.dp, 150.dp), color = Color.White)
                 }
             }
         }
         var articleUrl3 = "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/105-year-old-woman-shares-2-simple-secrets-to-living-a-long-life/articleshow/118007525.cms"
         item {
             var imageUrl by remember { mutableStateOf<String?>(null) }
+            var title by remember { mutableStateOf<String?>(null) }
             LaunchedEffect(articleUrl3) {
                 fetchOgImage(articleUrl3) { fetchedUrl ->
                     imageUrl = fetchedUrl
                 }
+                fetchOgTitle(articleUrl1){fetchedTitle ->
+                    title = fetchedTitle
+                }
             }
-            Card(
+            ElevatedCard(
                 onClick = {
                     openWebPage(context, articleUrl3)
                 },
@@ -320,6 +355,16 @@ fun SimpleLazyRow(
                     else{
                         Text("Clickable", Modifier.align(Alignment.Center))
                     }
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black, Color.Black.copy(alpha = 0.6f)),
+                                startY = 200f
+                            )
+                        ),
+                    )
+                    Text(text = title ?:"Loading..", modifier = Modifier.offset(5.dp, 150.dp), color = Color.White)
                 }
             }
         }
