@@ -44,7 +44,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
-    private val viewModel: ProductSearchViewModel by viewModels() // ✅ Move ViewModel here
+    private val viewModel: ProductSearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +94,6 @@ fun ProductSearchScreen(viewModel: ProductSearchViewModel = androidx.lifecycle.v
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // ✅ Correct way to use ViewModel
         Button(onClick = { viewModel.searchProduct(barcode) }) {
             Text("Search")
         }
