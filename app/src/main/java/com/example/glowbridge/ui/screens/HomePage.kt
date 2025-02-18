@@ -70,7 +70,7 @@ import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 
 @Composable
-fun HomePage(onScanSuccess: () -> Unit){
+fun HomePage(onSearchByBarcodeClick: () -> Unit){
     Column(
         modifier = Modifier
             .padding(10.dp, 110.dp),
@@ -81,7 +81,7 @@ fun HomePage(onScanSuccess: () -> Unit){
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Nutrient Lookup", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(10.dp))
-        nutrientLookupSection()
+        nutrientLookupSection(onSearchByBarcodeClick)
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Tracking & Insights", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(10.dp))
@@ -92,11 +92,7 @@ fun HomePage(onScanSuccess: () -> Unit){
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceEvenly
         ){
-            ScanFoodButton(
-                onClick = {
-                    onScanSuccess()
-                }
-            )
+            ScanFoodButton()
             LogFoodButton()
 //       SubmitButton()
         }
@@ -104,7 +100,7 @@ fun HomePage(onScanSuccess: () -> Unit){
 }
 
 @Composable
-fun nutrientLookupSection(){
+fun nutrientLookupSection(onSearchByBarcodeClick: () -> Unit){
     Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly){
         OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
@@ -125,7 +121,7 @@ fun nutrientLookupSection(){
             }
         }
 
-        OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.size(100.dp)) {
+        OutlinedCard(onClick = { onSearchByBarcodeClick() }, modifier = Modifier.size(100.dp)) {
             Box(
                 modifier = Modifier.size(100.dp),
                 contentAlignment = Alignment.Center
@@ -372,8 +368,8 @@ fun SimpleLazyRow(
 }
 
 @Composable
-fun ScanFoodButton(onClick: () -> Unit){
-    IconButton(onClick = {  onClick()}) {
+fun ScanFoodButton(){
+    IconButton(onClick = {  }) {
         Icon(imageVector = Icons.Filled.SoupKitchen, contentDescription = "Scan food", modifier = Modifier.size(50.dp))
     }
 }

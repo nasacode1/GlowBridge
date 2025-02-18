@@ -22,7 +22,6 @@ import com.example.glowbridge.R
 
 @Composable
 fun Welcome(onStartedSuccess: () -> Unit) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -30,14 +29,11 @@ fun Welcome(onStartedSuccess: () -> Unit) {
             .padding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-
-
     ){
         Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Logo", Modifier.size(350.dp))
-        GetStartedButton(onStartedSuccess = onStartedSuccess)
+        GetStartedButton(onStartedSuccess)
     }
 }
-
 
 @Composable
 fun GetStartedButton(onStartedSuccess: () -> Unit){

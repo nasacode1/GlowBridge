@@ -15,5 +15,4 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: 
     object Search : BottomNavItem("search", Icons.Default.Search, "Search")
     object Profile : BottomNavItem("profile", Icons.Default.Person, "Profile")
     object Streak : BottomNavItem("streak", Icons.Rounded.LocalFireDepartment, "Streak")
-
 }

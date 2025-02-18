@@ -22,7 +22,6 @@ fun BottomNavigationBar(navController: NavController) {
             val currentRoute = navController.currentDestination?.route
         items.forEach { item ->
             NavigationBarItem(
-
                 icon = { Icon(item.icon, contentDescription = item.label)  },
                 label = { Text(item.label) },
                 selected = currentRoute == item.route, // Handle selection state dynamically
