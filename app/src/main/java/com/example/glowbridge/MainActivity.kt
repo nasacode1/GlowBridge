@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun ProductSearchScreen(viewModel: ProductSearchViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     var barcode by remember { mutableStateOf("") }

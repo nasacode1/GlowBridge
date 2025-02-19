@@ -9,8 +9,10 @@ import androidx.navigation.compose.composable
 import com.example.glowbridge.ProductSearchScreen
 import com.example.glowbridge.ui.screens.HomePage
 import com.example.glowbridge.ui.screens.LoginScreen
+import com.example.glowbridge.ui.screens.MeetingPageScreen
 import com.example.glowbridge.ui.screens.SearchByBarcodeScreen
 import com.example.glowbridge.ui.screens.Welcome
+import com.example.glowbridge.ui.screens.calendlyEmbed
 import com.example.glowbridge.viewmodel.ProductSearchViewModel
 
 @Composable
@@ -51,6 +53,10 @@ fun NavGraph(navController: NavHostController){
 
             SearchByBarcodeScreen( viewModel
             )
+        }
+
+        composable("meeting"){
+            calendlyEmbed()
         }
 
 
