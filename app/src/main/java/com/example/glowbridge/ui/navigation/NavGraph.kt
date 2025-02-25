@@ -11,6 +11,7 @@ import com.example.glowbridge.ui.screens.HomePage
 import com.example.glowbridge.ui.screens.LoginScreen
 import com.example.glowbridge.ui.screens.MeetingPageScreen
 import com.example.glowbridge.ui.screens.SearchByBarcodeScreen
+import com.example.glowbridge.ui.screens.StreakPage
 import com.example.glowbridge.ui.screens.Welcome
 import com.example.glowbridge.ui.screens.calendlyEmbed
 import com.example.glowbridge.viewmodel.ProductSearchViewModel
@@ -57,6 +58,10 @@ fun NavGraph(navController: NavHostController){
 
         composable("meeting"){
             calendlyEmbed()
+        }
+
+        composable("streak"){
+            StreakPage()
         }
 
 
