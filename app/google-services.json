@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "40921900953",
+    "project_id": "health-app-d482d",
+    "storage_bucket": "health-app-d482d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40921900953:android:297493b717e7ac119bd508",
+        "android_client_info": {
+          "package_name": "com.example.glowbridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvIMJx7CQ5-OCDvVrfqo_jsa3vX32mg-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
