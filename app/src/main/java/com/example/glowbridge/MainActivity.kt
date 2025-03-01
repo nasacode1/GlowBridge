@@ -1,6 +1,7 @@
 package com.example.glowbridge
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -40,6 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.activity.viewModels
 import androidx.compose.material3.CenterAlignedTopAppBar
+import com.example.glowbridge.data.FirestoreManager
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,10 +60,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         CenterAlignedTopAppBar(title = { Text(text = "GlowBridge") })
-                    }
-                    ,
-                     bottomBar = {
-                        if(currentRoute != "Welcome") {
+                    },
+                    bottomBar = {
+                        if (currentRoute != "Welcome") {
                             BottomNavigationBar(navController)
                         }
                     }
@@ -70,52 +71,53 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
-}
 
-@Composable
-fun ProductSearchScreen(viewModel: ProductSearchViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-    var barcode by remember { mutableStateOf("") }
-    var productName by remember { mutableStateOf<String?>(null) }
-    var nutriScore by remember { mutableStateOf<String?>(null) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    @Composable
+    fun ProductSearchScreen(viewModel: ProductSearchViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+        var barcode by remember { mutableStateOf("") }
+        var productName by remember { mutableStateOf<String?>(null) }
+        var nutriScore by remember { mutableStateOf<String?>(null) }
+        var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        TextField(
-            value = barcode,
-            onValueChange = { barcode = it },
-            label = { Text("Enter Barcode") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            TextField(
+                value = barcode,
+                onValueChange = { barcode = it },
+                label = { Text("Enter Barcode") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { viewModel.searchProduct(barcode) }) {
-            Text("Search")
-        }
+            Button(onClick = { viewModel.searchProduct(barcode) }) {
+                Text("Search")
+            }
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-        productName?.let {
-            Text("Product Name: $it", style = MaterialTheme.typography.bodyLarge)
-        }
-        nutriScore?.let {
-            Text("NutriScore: $it", style = MaterialTheme.typography.bodyLarge)
-        }
-        errorMessage?.let {
-            Text("Error: $it", color = MaterialTheme.colorScheme.error)
+            productName?.let {
+                Text("Product Name: $it", style = MaterialTheme.typography.bodyLarge)
+            }
+            nutriScore?.let {
+                Text("NutriScore: $it", style = MaterialTheme.typography.bodyLarge)
+            }
+            errorMessage?.let {
+                Text("Error: $it", color = MaterialTheme.colorScheme.error)
+            }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GlowBridgeTheme {
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        GlowBridgeTheme {
+        }
     }
 }

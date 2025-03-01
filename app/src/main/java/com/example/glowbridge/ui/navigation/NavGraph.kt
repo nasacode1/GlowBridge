@@ -6,7 +6,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.glowbridge.ProductSearchScreen
 import com.example.glowbridge.ui.screens.HomePage
 import com.example.glowbridge.ui.screens.LoginScreen
 import com.example.glowbridge.ui.screens.MeetingPageScreen

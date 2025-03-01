@@ -48,6 +48,15 @@ fun StreakPage(){
         ) {
             Text(text = "Max streak count : ")
         }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 140.dp)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text(text = "Curr streak count : ")
+        }
         Column (modifier = Modifier.matchParentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){

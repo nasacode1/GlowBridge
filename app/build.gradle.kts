@@ -53,6 +53,7 @@ android {
 
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+    implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("androidx.activity:activity-ktx:1.8.0")
