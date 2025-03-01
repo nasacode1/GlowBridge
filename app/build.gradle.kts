@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -50,16 +52,18 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+    implementation("com.google.firebase:firebase-analytics")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("androidx.activity:activity-ktx:1.8.0")
     implementation ("org.jsoup:jsoup:1.15.3")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.ui:ui:1.5.3")
+
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidx.core.ktx)
     implementation ("androidx.navigation:navigation-compose:2.8.5")
     implementation ("androidx.webkit:webkit:1.6.0")
