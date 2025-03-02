@@ -35,9 +35,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.glowbridge.R
+import com.example.glowbridge.viewmodel.StreakTaskViewModel
 
 @Composable
 fun StreakPage(){
+    private lateinit var viewModel: StreakTaskViewModel
     Box(modifier = Modifier.fillMaxSize()){
         Row(
             modifier = Modifier

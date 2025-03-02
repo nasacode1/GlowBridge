@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import androidx.activity.viewModels
 import androidx.compose.material3.CenterAlignedTopAppBar
 import com.example.glowbridge.data.FirestoreManager
+import com.example.glowbridge.data.repository.StreakTaskRepository
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val repo8 = StreakTaskRepository()
         setContent {
             GlowBridgeTheme {
                 val navController = rememberNavController()

@@ -5,4 +5,5 @@ object FirestoreManager {
     val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
 
+
 }
