@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.glowbridge.data.repository.StreakTaskRepository
 import com.example.glowbridge.ui.screens.HomePage
 import com.example.glowbridge.ui.screens.LoginScreen
 import com.example.glowbridge.ui.screens.MeetingPageScreen
@@ -60,7 +61,7 @@ fun NavGraph(navController: NavHostController){
         }
 
         composable("streak"){
-            StreakPage()
+            StreakPage(StreakTaskRepository())
         }
 
 
