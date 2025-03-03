@@ -1,6 +1,7 @@
 package com.example.glowbridge.ui.screens
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -50,14 +51,16 @@ import com.example.glowbridge.viewmodel.StreakTaskViewModel
 import com.example.glowbridge.viewmodel.StreakTaskViewModelFactory
 
 @Composable
-fun StreakPage(repository: StreakTaskRepository){
+fun StreakPage(sharedPreferences: SharedPreferences){
+    val context = LocalContext.current
+    val repository = remember { StreakTaskRepository() }
     val viewModel: StreakTaskViewModel = viewModel(
-        factory = StreakTaskViewModelFactory(repository)
+        factory = StreakTaskViewModelFactory(repository, sharedPreferences)
     )
     val task = viewModel.task.observeAsState().value
 
     LaunchedEffect(Unit) {
-        viewModel.fetchRandomTask() // Fetch task when screen loads
+        viewModel.fetchNewTask()
     }
     Box(modifier = Modifier.fillMaxSize()){
         Row(

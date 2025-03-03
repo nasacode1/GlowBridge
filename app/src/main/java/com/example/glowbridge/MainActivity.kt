@@ -1,5 +1,6 @@
 package com.example.glowbridge
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -42,7 +43,9 @@ import kotlinx.coroutines.launch
 import androidx.activity.viewModels
 import androidx.compose.material3.CenterAlignedTopAppBar
 import com.example.glowbridge.data.FirestoreManager
+import com.example.glowbridge.data.repository.AuthRepository
 import com.example.glowbridge.data.repository.StreakTaskRepository
+import com.example.glowbridge.ui.screens.LoginScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +57,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val repo8 = StreakTaskRepository()
         setContent {
+            val authRepository = AuthRepository()
             GlowBridgeTheme {
+                LoginScreen(authRepository) { userId ->
+                    Log.d("Login", "User logged in with ID: $userId")
+                }
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -69,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    NavGraph(navController = navController)
+                    NavGraph(navController = navController, this )
                 }
             }
         }

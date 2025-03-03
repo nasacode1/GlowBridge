@@ -61,7 +61,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.ui:ui:1.5.3")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-
+    implementation("com.google.firebase:firebase-auth-ktx")
 
 
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
