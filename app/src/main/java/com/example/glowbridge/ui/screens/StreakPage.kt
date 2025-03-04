@@ -58,9 +58,13 @@ fun StreakPage(sharedPreferences: SharedPreferences){
         factory = StreakTaskViewModelFactory(repository, sharedPreferences)
     )
     val task = viewModel.task.observeAsState().value
+    val currentStreak = viewModel.currentStreak.observeAsState(0).value
+    val maxStreak = viewModel.maxStreak.observeAsState(0).value
+    val isStarExpanded = viewModel.isStarExpanded.observeAsState(false).value
 
     LaunchedEffect(Unit) {
         viewModel.fetchNewTask()
+        viewModel.updateStreak()
     }
     Box(modifier = Modifier.fillMaxSize()){
         Row(
@@ -70,7 +74,7 @@ fun StreakPage(sharedPreferences: SharedPreferences){
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Max streak count : ")
+            Text(text = "Max streak count :$maxStreak ")
         }
         Row(
             modifier = Modifier
@@ -79,25 +83,27 @@ fun StreakPage(sharedPreferences: SharedPreferences){
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Curr streak count : ")
+            Text(text = "Curr streak count : $currentStreak")
         }
         Column (modifier = Modifier.matchParentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
             val context = LocalContext.current
             var expanded = remember{ mutableStateOf(false)}
-            Image(painter = painterResource(id = R.drawable.mainstar), contentDescription ="Main star",
+            Image(
+                painter = painterResource(id = R.drawable.mainstar),
+                contentDescription = "Main star",
                 modifier = Modifier
-                    .height(if (expanded.value) 300.dp else 200.dp)
-                    .clickable
-                    {
-                        if (!expanded.value) {
+                    .height(if (isStarExpanded) 300.dp else 200.dp)
+                    .clickable {
+                        if (!isStarExpanded) {
                             val mediaPlayer = MediaPlayer.create(context, R.raw.sparking)
                             mediaPlayer.start()
-                            expanded.value = !expanded.value
+                            viewModel.setStarExpanded(true)
                         }
                     }
             )
+
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Today's Task:", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
