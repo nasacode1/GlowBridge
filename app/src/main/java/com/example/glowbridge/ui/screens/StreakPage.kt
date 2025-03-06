@@ -49,9 +49,8 @@ import com.example.glowbridge.R
 import com.example.glowbridge.data.repository.StreakTaskRepository
 import com.example.glowbridge.viewmodel.StreakTaskViewModel
 import com.example.glowbridge.viewmodel.StreakTaskViewModelFactory
-
 @Composable
-fun StreakPage(sharedPreferences: SharedPreferences){
+fun StreakPage(sharedPreferences: SharedPreferences) {
     val context = LocalContext.current
     val repository = remember { StreakTaskRepository() }
     val viewModel: StreakTaskViewModel = viewModel(
@@ -63,10 +62,10 @@ fun StreakPage(sharedPreferences: SharedPreferences){
     val isStarExpanded = viewModel.isStarExpanded.observeAsState(false).value
 
     LaunchedEffect(Unit) {
-        viewModel.fetchNewTask()
-        viewModel.updateStreak()
-    }
-    Box(modifier = Modifier.fillMaxSize()){
+        viewModel.loadTask()
+            }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,7 +73,7 @@ fun StreakPage(sharedPreferences: SharedPreferences){
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Max streak count :$maxStreak ")
+            Text(text = "Max streak count: $maxStreak")
         }
         Row(
             modifier = Modifier
@@ -83,13 +82,13 @@ fun StreakPage(sharedPreferences: SharedPreferences){
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Curr streak count : $currentStreak")
+            Text(text = "Current streak count: $currentStreak")
         }
-        Column (modifier = Modifier.matchParentSize(),
+        Column(
+            modifier = Modifier.matchParentSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center){
-            val context = LocalContext.current
-            var expanded = remember{ mutableStateOf(false)}
+            verticalArrangement = Arrangement.Center
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.mainstar),
                 contentDescription = "Main star",
@@ -100,6 +99,7 @@ fun StreakPage(sharedPreferences: SharedPreferences){
                             val mediaPlayer = MediaPlayer.create(context, R.raw.sparking)
                             mediaPlayer.start()
                             viewModel.setStarExpanded(true)
+                            viewModel.updateStreak()
                         }
                     }
             )
@@ -108,7 +108,7 @@ fun StreakPage(sharedPreferences: SharedPreferences){
             Text(text = "Today's Task:", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = task.toString(),
+                text = task ?: "No task available",
                 fontSize = 16.sp,
                 color = Color.DarkGray,
                 modifier = Modifier.padding(30.dp)
@@ -116,4 +116,3 @@ fun StreakPage(sharedPreferences: SharedPreferences){
         }
     }
 }
-
