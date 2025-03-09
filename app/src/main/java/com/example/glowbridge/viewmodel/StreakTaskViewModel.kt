@@ -1,5 +1,6 @@
 package com.example.glowbridge.viewmodel
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,7 +11,6 @@ import com.example.glowbridge.data.repository.StreakTaskRepository
 import kotlinx.coroutines.launch
 import java.util.Calendar
 class StreakTaskViewModel(
-
     private val repository: StreakTaskRepository,
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
@@ -31,21 +31,23 @@ class StreakTaskViewModel(
     private val _lastTaskDate = MutableLiveData<String?>()
     val lastTaskDate: LiveData<String?> = _lastTaskDate
 
+    private val userSharedPreferences = sharedPreferences
+
     init {
         loadTask()
         loadStreakData()
-       checkIfNewDay()
+        checkIfNewDay()
         loadStarState()
     }
 
     private fun loadStarState() {
-        val expanded = sharedPreferences.getBoolean("is_star_expanded", false)
+        val expanded = userSharedPreferences.getBoolean("is_star_expanded", false)
         _isStarExpanded.value = expanded
     }
 
     fun loadTask() {
-        val savedTask = sharedPreferences.getString("task_of_the_day", null)
-        val lastUpdated = sharedPreferences.getLong("task_timestamp", 0)
+        val savedTask = userSharedPreferences.getString("task_of_the_day", null)
+        val lastUpdated = userSharedPreferences.getLong("task_timestamp", 0)
 
         Log.d("StreakDebug", "Loading task - savedTask: $savedTask, lastUpdated: $lastUpdated")
 
@@ -58,13 +60,12 @@ class StreakTaskViewModel(
         }
     }
 
-
     fun fetchNewTask() {
         viewModelScope.launch {
             val newTask = repository.getRandomTask()
             newTask?.let {
                 _task.value = it
-                sharedPreferences.edit()
+                userSharedPreferences.edit()
                     .putString("task_of_the_day", it)
                     .putLong("task_timestamp", System.currentTimeMillis())
                     .apply()
@@ -74,12 +75,12 @@ class StreakTaskViewModel(
 
     fun setStarExpanded(expanded: Boolean) {
         _isStarExpanded.value = expanded
-        sharedPreferences.edit().putBoolean("is_star_expanded", expanded).apply()
+        userSharedPreferences.edit().putBoolean("is_star_expanded", expanded).apply()
     }
 
     private fun loadStreakData() {
-        val savedCurrentStreak = sharedPreferences.getInt("current_streak", -1)
-        val savedMaxStreak = sharedPreferences.getInt("max_streak", -1)
+        val savedCurrentStreak = userSharedPreferences.getInt("current_streak", -1)
+        val savedMaxStreak = userSharedPreferences.getInt("max_streak", -1)
 
         if (savedCurrentStreak == -1 || savedMaxStreak == -1) {
             Log.d("StreakDebug", "Fetching streak data from Firestore...")
@@ -87,7 +88,7 @@ class StreakTaskViewModel(
                 _currentStreak.postValue(currentStreak)
                 _maxStreak.postValue(maxStreak)
 
-                sharedPreferences.edit()
+                userSharedPreferences.edit()
                     .putInt("current_streak", currentStreak)
                     .putInt("max_streak", maxStreak)
                     .putLong("streak_last_updated", System.currentTimeMillis())
@@ -100,12 +101,12 @@ class StreakTaskViewModel(
     }
 
     private fun isFirstTimeLoggingIn(): Boolean {
-        val lastUpdated = sharedPreferences.getLong("streak_last_updated", 0)
+        val lastUpdated = userSharedPreferences.getLong("streak_last_updated", 0)
         return lastUpdated == 0L
     }
 
     fun updateStreak() {
-        val lastUpdated = sharedPreferences.getLong("streak_last_updated", 0)
+        val lastUpdated = userSharedPreferences.getLong("streak_last_updated", 0)
         Log.d("StreakDebug", "$lastUpdated")
         val lastUpdateDate = Calendar.getInstance().apply { timeInMillis = lastUpdated }
         val today = Calendar.getInstance()
@@ -131,7 +132,7 @@ class StreakTaskViewModel(
 
         _currentStreak.value = currentStreak
 
-        sharedPreferences.edit()
+        userSharedPreferences.edit()
             .putInt("current_streak", currentStreak)
             .putLong("streak_last_updated", System.currentTimeMillis())
             .apply()
@@ -139,23 +140,23 @@ class StreakTaskViewModel(
         if (currentStreak > maxStreak) {
             maxStreak = currentStreak
             _maxStreak.value = maxStreak
-            sharedPreferences.edit().putInt("max_streak", maxStreak).apply()
+            userSharedPreferences.edit().putInt("max_streak", maxStreak).apply()
             repository.updateMaxStreak(maxStreak)
         }
     }
 
     private fun checkIfNewDay() {
-        val lastUpdated = sharedPreferences.getLong("streak_last_updated", 0)
+        val lastUpdated = userSharedPreferences.getLong("streak_last_updated", 0)
 
         if (!isSameDay(lastUpdated)) {
-            sharedPreferences.edit().putBoolean("is_star_expanded", false).apply()
+            userSharedPreferences.edit().putBoolean("is_star_expanded", false).apply()
             _isStarExpanded.postValue(false)
             updateStreak()
         }
     }
 
     private fun wasTaskCompletedYesterday(): Boolean {
-        val lastCompletedDateMillis = sharedPreferences.getLong("streak_last_updated", 0)
+        val lastCompletedDateMillis = userSharedPreferences.getLong("streak_last_updated", 0)
         if (lastCompletedDateMillis == 0L) return false
 
         val lastCompletedDate = Calendar.getInstance().apply { timeInMillis = lastCompletedDateMillis }
@@ -178,7 +179,7 @@ class StreakTaskViewModel(
     }
 
     fun markTaskCompleted() {
-        sharedPreferences.edit().putBoolean("is_star_expanded", true).apply()
+        userSharedPreferences.edit().putBoolean("is_star_expanded", true).apply()
         _isStarExpanded.postValue(true)
     }
 }

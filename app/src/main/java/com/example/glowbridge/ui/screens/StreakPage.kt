@@ -53,6 +53,7 @@ import com.example.glowbridge.viewmodel.StreakTaskViewModelFactory
 fun StreakPage(sharedPreferences: SharedPreferences) {
     val context = LocalContext.current
     val repository = remember { StreakTaskRepository() }
+
     val viewModel: StreakTaskViewModel = viewModel(
         factory = StreakTaskViewModelFactory(repository, sharedPreferences)
     )

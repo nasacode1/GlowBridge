@@ -78,7 +78,8 @@ fun LoginScreen(
                 Text("Logged in successfully!")
                 LaunchedEffect(Unit) {
                     val userId = (authState as AuthState.Success).userId
-                    createUserInFirestore(userId) // Ensure user collection exists
+                    createUserInFirestore(userId)
+
                     onLoginSuccess(userId)
                 }
             }

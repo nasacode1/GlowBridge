@@ -30,9 +30,9 @@ class StreakTaskRepository {
             }
     }
 
-    fun loadStreakData(onComplete: (Int, Int, String?) -> Unit) {
+    fun loadStreakData(onComplete: (Int, Int, String?) -> Unit){
         db.collection("users").document(userId).get()
-            .addOnSuccessListener { document ->
+            .addOnSuccessListener {document ->
                 if (document.exists()) {
                     val maxStreak = document.getLong("max_streak")?.toInt() ?: 0
                     val currentStreak = document.getLong("current_streak")?.toInt() ?: 0

@@ -36,7 +36,9 @@ fun NavGraph(navController: NavHostController, context: Context){
         composable("LoginScreen"){
             LoginScreen(
                 repository = AuthRepository(),
-                onLoginSuccess = { username ->
+                onLoginSuccess = { userId ->
+                    val sharedPreferences = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+                    sharedPreferences.edit().putString("user_id", userId).apply()
                     navController.navigate("HomePage")
                 }
             )
@@ -65,16 +67,18 @@ fun NavGraph(navController: NavHostController, context: Context){
             calendlyEmbed()
         }
 
-        composable("streak"){
-            val sharedPreferences = remember {
-                context.getSharedPreferences("streak_prefs", Context.MODE_PRIVATE)
+        composable("streak") {
+            val sharedPreferences = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+            val userId = sharedPreferences.getString("user_id", "") ?: ""
+
+            val userStreakPreferences = remember {
+                context.getSharedPreferences("streak_prefs_$userId", Context.MODE_PRIVATE)
             }
 
-            StreakPage(sharedPreferences)
+            StreakPage(userStreakPreferences)
         }
 
-
-        }
+    }
 
     }
 
