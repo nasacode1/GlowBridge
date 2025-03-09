@@ -58,8 +58,8 @@ fun StreakPage(sharedPreferences: SharedPreferences) {
         factory = StreakTaskViewModelFactory(repository, sharedPreferences)
     )
     val task = viewModel.task.observeAsState().value
-    val currentStreak = viewModel.currentStreak.observeAsState(0).value
-    val maxStreak = viewModel.maxStreak.observeAsState(0).value
+//    val maxStreak = viewModel.maxStreak.observeAsState(0).value
+//    val currentStreak = viewModel.currentStreak.observeAsState(0).value
     val isStarExpanded = viewModel.isStarExpanded.observeAsState(false).value
 
     LaunchedEffect(Unit) {
@@ -74,7 +74,10 @@ fun StreakPage(sharedPreferences: SharedPreferences) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Max streak count: $maxStreak")
+            if(isStarExpanded or !isStarExpanded){
+                val currentStreak = viewModel.currentStreak.observeAsState(0).value
+                Text(text = "Current streak count: $currentStreak")
+            }
         }
         Row(
             modifier = Modifier
@@ -83,7 +86,10 @@ fun StreakPage(sharedPreferences: SharedPreferences) {
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Current streak count: $currentStreak")
+            if (isStarExpanded or !isStarExpanded){
+                val maxStreak = viewModel.maxStreak.observeAsState(0).value
+                Text(text = "Max streak count: $maxStreak")
+            }
         }
         Column(
             modifier = Modifier.matchParentSize(),

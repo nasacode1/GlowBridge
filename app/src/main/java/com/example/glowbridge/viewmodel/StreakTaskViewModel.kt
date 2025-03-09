@@ -48,9 +48,7 @@ class StreakTaskViewModel(
     fun loadTask() {
         val savedTask = userSharedPreferences.getString("task_of_the_day", null)
         val lastUpdated = userSharedPreferences.getLong("task_timestamp", 0)
-
         Log.d("StreakDebug", "Loading task - savedTask: $savedTask, lastUpdated: $lastUpdated")
-
         if (savedTask != null && isSameDay(lastUpdated)) {
             Log.d("StreakDebug", "Task is the same day, using saved task.")
             _task.value = savedTask ?: "Not available"
@@ -120,11 +118,21 @@ class StreakTaskViewModel(
         Log.d("StreakDebug", "Before update -> Current: $currentStreak, Max: $maxStreak, Last Updated: $lastUpdated")
         Log.d("StreakDebug", "isNewLogin: $isNewLogin, completedYesterday: $completedYesterday")
 
-        if (isNewLogin) {
-            if (completedYesterday) {
-                currentStreak += 1
-            } else {
-                currentStreak = 1
+        if (completedYesterday) {
+            currentStreak += 1
+            if (currentStreak > maxStreak) {
+                maxStreak = currentStreak
+                _maxStreak.value = maxStreak
+                userSharedPreferences.edit().putInt("max_streak", maxStreak).apply()
+                repository.updateMaxStreak(maxStreak)
+            }
+        } else {
+            currentStreak = 1
+            if (currentStreak > maxStreak) {
+                maxStreak = currentStreak
+                _maxStreak.value = maxStreak
+                userSharedPreferences.edit().putInt("max_streak", maxStreak).apply()
+                repository.updateMaxStreak(maxStreak)
             }
         }
 
@@ -136,13 +144,6 @@ class StreakTaskViewModel(
             .putInt("current_streak", currentStreak)
             .putLong("streak_last_updated", System.currentTimeMillis())
             .apply()
-
-        if (currentStreak > maxStreak) {
-            maxStreak = currentStreak
-            _maxStreak.value = maxStreak
-            userSharedPreferences.edit().putInt("max_streak", maxStreak).apply()
-            repository.updateMaxStreak(maxStreak)
-        }
     }
 
     private fun checkIfNewDay() {
